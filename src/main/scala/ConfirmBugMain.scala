@@ -6,7 +6,7 @@ import org.slf4j.{Logger, LoggerFactory}
 /**
   * Created by myhr on 24.03.17.
   */
-object ConfirmBug {
+object ConfirmBugMain {
 
   def main(args: Array[String]): Unit = {
     val ssc = new StreamingContext(new SparkConf().setMaster("local[4]").setAppName("test"), Duration(1000))
@@ -17,7 +17,10 @@ object ConfirmBug {
           .repartition(4)
           .foreachPartition(it => {
             val logger: Logger = LoggerFactory.getLogger(getClass)
-            it.foreach(index => logger.error(s"${Thread.currentThread().getName} $index"))
+            it.foreach { index =>
+                logger.error(s"${Thread.currentThread().getName} $index")
+                println(s"${Thread.currentThread().getName} $index")
+            }
           })
       })
 
